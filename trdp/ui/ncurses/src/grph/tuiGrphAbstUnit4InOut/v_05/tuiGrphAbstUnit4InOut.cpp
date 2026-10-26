@@ -132,6 +132,10 @@
         clrtoeol();
     	refresh();
         endwin();                           /* Wait for user input */
+
+        const char *t_str_version = curses_version();
+        // std::string l_str_version (t_str_version);
+        std::cout << "ncurses version: " << t_str_version << '\n';
     }
 
     // section end   **** INIT *****
@@ -816,6 +820,9 @@
         endGraphEnv();
         std::string l_strExit (p_strExit);
         std::cout << l_strExit << '\n';
+        const char *t_str_version = curses_version();
+        std::string l_str_version (t_str_version);
+        std::cout << "ncurses version: " << l_str_version << '\n';
         // std::exit(0);
 
 
@@ -874,9 +881,14 @@
                 snprintf(l_str, sizeof l_str,"%03d / %03d", g_mouseEvent.x, g_mouseEvent.y);
                 mvwprintw(g_pNcursWin, 3, 50, "MOUSE_coordinates: %s",l_str);
                 snprintf(l_str, sizeof l_str,"%08lx", g_mouseEvent.bstate);
-                mvwprintw(g_pNcursWin, 4, 50, "MOUSE_status: %s",l_str);
-                if(TUI_MOUSE_ROLL_UP    == g_mouseEvent.bstate) l_eventCode = tuiEventCode_t::mouseRollUp;
+                if(TUI_MOUSE_ROLL_UP    == g_mouseEvent.bstate)
+                    mvwprintw(g_pNcursWin, 4, 50, "MOUSE_UP    : %s",l_str);
+                else if(TUI_MOUSE_ROLL_DOWN    == g_mouseEvent.bstate)
+                    mvwprintw(g_pNcursWin, 4, 50, "MOUSE_DOWN  : %s",l_str);
+                else 
+                    mvwprintw(g_pNcursWin, 4, 50, "MOUSE_status: %s",l_str);
                 if(TUI_MOUSE_ROLL_DOWN  == g_mouseEvent.bstate) l_eventCode = tuiEventCode_t::mouseRollDown;            
+                if(TUI_MOUSE_ROLL_UP    == g_mouseEvent.bstate) l_eventCode = tuiEventCode_t::mouseRollUp;
                 break;
             case KEY_DOWN:
             case TUI_KEY_TAB:
